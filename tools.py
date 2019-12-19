@@ -3,7 +3,7 @@ from random import randint
 from random import seed
 seed()
 
-def get_hex(number_value,padding=6):
+def get_hex(number_value,padding=8):
     """
     Takes an integer value and returns it as a hex string (0x...) of number_value.
     ============INPUTS================
@@ -16,11 +16,11 @@ def get_hex(number_value,padding=6):
     if type(number_value) == np.ndarray:
         np_hex = np.vectorize(('0x{:0'+str(padding)+'X}').format)
         return np_hex(number_value.astype(int))
-    
+
     # Deal with single scalar numbers:
     else:
         return (('0x{:0'+str(padding)+'X}')).format(int(number_value))
-    
+
 def is_hex(s):
     """
     Takes an input string and checks if it's hex.
@@ -35,7 +35,7 @@ def process_line(line):
     """
     Takes an input string and removes non-alphanumeric characters other than "," "_" and "."
     Also deals with comments (all characters after # are ignored)
-    
+
     Outputs:
         out:       the processed string
         comma_idx: list of positions in the string where commas exist.
@@ -60,7 +60,7 @@ def pick_random(n_ind):
     n_picks = randint(0,n_ind)
     in_pool = np.arange(n_ind)
     out_pool = []
-    
+
     for i in range(n_picks):
             pick = randint(0,n_ind-1-i)
             out_pool.append(in_pool[pick])

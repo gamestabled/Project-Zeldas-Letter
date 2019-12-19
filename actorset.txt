@@ -1,78 +1,141 @@
-version=oot_ntsc_1.0
+version=OoT3D_USA
 
-# Enter main room
-Step 0 
-0x002E,5 # Door to scrub room
-0x002E,2 # Door to compass room
-0x0023,2 # Loading plane to B1
-0x0095,2 # Skullwalltulas
-0x0095,2
-0x0095,2
-0x0037,2 # Skulltulas
-0x0037,2
-0x0037,2
-0x0125,2 # Grass
-0x0125,2
-0x0125,2
-0x0125,2
-0x0125,2
-0x0055,2 # Deku Babas
-0x0055,2
-0x0055,2
-0x000A,2
-0x000F,2 # Central web
-0x011B,2 # navi "You can open doors"
-0x011B,2 # navi "look at this web"
-0x011B,2 # navi "You can open doors"
-0x011B,2 # navi "You can climb vines"
-0x011B,2 #^
-0x011B,2 #^
-0x011B,2 #^
-0x011B,2 #^
-0x011B,2 #^
-0x0015,2 # heart pickups
-0x0015,2
+# Start in the Main Room
+Step 0
+0x0018,9 # Probably the DC Boss Room load zone?
+0x0023,8 # Load plane to Baby Dodongo Hallway
+0x0023,3 # Load plane to Bomb Bag Room (North)
+0x0023,3 # Load plane to Bomb Bag Room (South)
+0x002e,3
+0x002e,3
+0x002e,3
+0x002e,3
+0x0125,3 # Grass
+0x0058,3
+0x0058,3
+0x0013,1 # Keese
+0x0013,1
+0x008a,1 # Beamos
+0x008a,1
+0x008a,1
+0x0185,3
+0x0195,3
+0x004C,3
+0x004C,3
+0x004C,3
+0x004C,3
+0x0059,1 # Wall
+0x0059,0 # Wall to Baby Dodongo Hallway
+0x011B,0 # Navi text
+0x000A,3 # Map chest
+0x0058,3
+0x012A,3
+0x000A,3 # Deku Shield chest
+0x011B,0 # Navi text
+0x0059,1 # Wall
+0x01B9,3
+0x012A,3
+0x003F,3
+0x0059,1 # Wall
+0x0059,0 # Wall at entrance?
 
-# Throw the boomerang at the heart
+# Kill Some Stuff?
 Step 1
-0x0032,5 # Boomerang
 
-# Enter scrub room (scrub already killed)
+# Drop Some Stuff?
 Step 2
-0x02E,4 # Door to slingshot room
 
-# Drop some stuff
+# Enter the Baby Dodongo Hallway
 Step 3
+#0x0023 # Load plane to Main Room
+0x002E,6
+0x002E,6
+0x002E,6
+0x0013,4 # Keese
+0x0013,4
+0x002F,4 # Baby Dodongos
+0x002F,4
+0x002F,4
+0x002F,4
+0x002F,4
+0x002F,4
+0x0054,6
+0x0054,6
+0x0059,4 # Wall
+0x0095,6
+0x0111,6 # Pots
+0x0111,4
+0x01C9,6
+0x0111,4 # Pots
+0x0111,4
+0x0111,4
+0x0111,4
+0x012A,6
 
-# Enter main room again
+# Kill stuff
 Step 4
-0x002E,5 # Door to scrub room
-0x002E,5 # Door to compass room
-0x0023,5 # Loading plane to B1
-0x0095,5 # Skullwalltulas
-0x0095,5
-0x0095,5
-0x0037,5 # Skulltulas
-0x0037,5
-0x0037,5
-0x0125,5 # Grass
-0x0125,5
-0x0125,5
-0x0125,5
-0x0125,5
-0x0055,5 # Deku Babas
-0x0055,5
-0x0055,5
-0x000A,5
-0x000F,5 # Central web
-0x011B,5 # navi "You can open doors"
-0x011B,5 # navi "look at this web"
-0x011B,5 # navi "You can open doors"
-0x011B,5 # navi "You can climb vines"
-0x011B,5 #^
-0x011B,5 #^
-0x011B,5 #^
-0x011B,5 #^
-0x011B,5 #^
-0x0015,5 # heart pickups
-0x0015,5
+
+# Drop stuff
+Step 5
+
+# Reenter the Main Room
+Step 6
+# 0x0023 # Load plane to Baby Dodongo Hallway
+0x0023,7 # Load plane to Bomb Bag Room (North)
+0x0023,8 # Load plane to Bomb Bag Room (South)
+0x002e,7
+0x002e,7
+0x002e,7
+0x002e,7
+0x0125,7 # Grass
+0x0058,7
+0x0058,7
+0x0013,7 # Keese
+0x0013,7
+0x008a,7 # Beamos
+0x008a,7
+0x008a,7
+0x0185,7
+0x0195,7
+0x004C,7
+0x004C,7
+0x004C,7
+0x004C,7
+0x0059,6
+0x0059,6 # Wall to Baby Dodongo Hallway
+0x011B,6 # Navi text
+0x000A,7 # Map chest
+0x0058,7
+0x012A,7
+0x000A,7 # Deku Shield chest
+0x011B,6 # Navi text
+0x0059,6
+0x01B9,7
+0x012A,7
+0x003F,7
+0x0059,6
+0x0059,6 # Wall at entrance
+
+# Enter the Bomb Bag Room
+Step 7
+0x0023,8 # Load plane to Second Fire Circle Room
+#0x0023  # Load plane to Main Room (North)
+#0x0023,8 # Load plane to Main Room (South)
+0x0023,8 # Load plane to First Fire Circle Room
+0x002E,8
+0x0125,8
+0x00FF,8
+0x004C,8
+0x0080,8
+0x0080,8
+0x0059,8 # Wall to scrub room
+0x000A,8
+0x000A,8
+0x0080,8
+0x011B,8
+0x011B,8
+0x011B,8
+0x0059,8
+0x0015,8
+0x0111,8
+0x0111,8

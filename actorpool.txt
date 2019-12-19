@@ -1,15 +1,26 @@
-actor1_id = 0x0015 # heart
-actor2_id = 0x0125 # grass
-actor1_step = 0 # Look for the heart in the heap at step 0
-actor2_step = 4 # Look for the grass in the heap at step 4
-offset = 0 # We want the heart at step 0 and the grass at step 4 to be in the same position in memory (0 offset)
+actor1_id = 0x0111 # grass
+actor2_id = 0x000A # chest
+actor1_step = 4 # Look for the pot in the heap after kills in Hallway
+actor2_step = 6 # Look for the chest in the heap when we enter Bomb Bag room
+offset = 0x10 # We want the grass at step 2 and the chest at step 4 to be offset by 0x10
 
-Step 3
-0x0010,4 # Bomb
-0x0010,4 # Bomb
-0x00DA,4 # Bombchu
-0x0021,4 # Fish
-0x0021,4 # Fish
-0x0021,4 # Fish
-0x0020,4 # Set of 3 bugs
-0x00F0,4 # Blue fire
+Step 2
+0x0010,3 # Bomb
+0x0010,3 # Bomb
+0x0010,3 # Bomb
+0x00DA,3 # Bombchu
+0x00DA,3 # Bombchu
+0x00DA,3 # Bombchu
+0x0021,3 # Fish
+0x0021,3 # Fish
+0x0021,3 # Fish
+0x0020,3 # Set of 3 bugs
+
+Step 5
+0x00DA,6 # Bombchu
+0x00DA,6 # Bombchu
+0x00DA,6 # Bombchu
+0x0021,6 # Fish
+0x0021,6 # Fish
+0x0021,6 # Fish
+0x0020,6 # Set of 3 bugs

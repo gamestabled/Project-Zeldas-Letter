@@ -1,7 +1,9 @@
 # Project-Zeldas-Letter
-Python simulator for OoT and MM's actor heap. Finds solutions to heap-placement problems.<br/>
+Python simulator for OoT/OoT3D and MM's actor heap. Finds solutions to heap-placement problems.<br/>
 
 You will need Python 3 and the numpy module.
+
+This version is forked from GlitchesAndStuff's original version https://github.com/AdamKiddle/Project-Zeldas-Letter. This fork begins to add support for OoT3D, however oot3d_actors.pzl is incomplete, I am editing actors on it from oot_actor.pzl as I need them. I will continue to work on it as I feel like, but feel free to help.
 
 # User Guide
 The simulator works by allocating and deallocating actors at a series of user-defined "steps". A step may correspond to loading a new room and unloading a previous one, destroying certain actors like enemies or bombs, or spawning extra actors such as bushes in bush circles or projectiles from a deku scrub. It's essentially how we break up the history of what happens in the heap.<br/>
@@ -9,6 +11,7 @@ The simulator works by allocating and deallocating actors at a series of user-de
 ## actorset.txt
 The file "actorset.txt" contains the info about what actors are loaded at each step. It also contains the version you're currently using. Choose version from these strings (not case-sensitive):<br/>
 
+* "OoT3D_USA"
 * "OoT_NTSC_1.0"
 * "OoT_NTSC_1.1"
 * "OoT_NTSC_1.2"
@@ -69,7 +72,7 @@ ACTOR_ID, DEALLOCATION_STEP
 .
 .
 
-STEP Z 
+STEP Z
 ACTOR_ID, DEALLOCATION_STEP
 ACTOR_ID, DEALLOCATION_STEP # You can add comments with the hash symbol at any point
 ACTOR_ID, DEALLOCATION_STEP
@@ -103,7 +106,7 @@ Let's take an example from Ocarina of Time. Let's say I wanted to enter the main
 version=oot_ntsc_1.0
 
 # Enter main room
-Step 0 
+Step 0
 0x002E,2 # Door to scrub room
 0x002E,1 # Door to compass room
 0x0023,1 # Loading plane to B1
@@ -115,7 +118,7 @@ Notice how I've given the door to the scrub room a larger deallocation step - th
 version=oot_ntsc_1.0
 
 # Enter main room
-Step 0 
+Step 0
 0x002E,2 # Door to scrub room
 0x002E,1 # Door to compass room
 0x0023,1 # Loading plane to B1
@@ -211,7 +214,7 @@ Putting everything together we end up with the "actorpool.txt" file looking like
 version=oot_ntsc_1.0
 
 # Enter main room
-Step 0 
+Step 0
 0x002E,2 # Door to scrub room
 0x002E,1 # Door to compass room
 0x0023,1 # Loading plane to B1
@@ -271,7 +274,7 @@ Let's also read the "you can open doors here" text and drop 2 bombs before we en
 version=oot_ntsc_1.0
 
 # Enter main room
-Step 0 
+Step 0
 0x002E,4 # Door to scrub room
 0x002E,3 # Door to compass room
 0x0023,3 # Loading plane to B1
@@ -334,7 +337,7 @@ Let's take another example in deku tree. We want to displace a clump of grass in
 version=oot_ntsc_1.0
 
 # Enter main room
-Step 0 
+Step 0
 0x002E,5 # Door to scrub room
 0x002E,2 # Door to compass room
 0x0023,2 # Loading plane to B1
@@ -478,5 +481,4 @@ These are indeed in the same place, which means that boomeranging the second hea
 
 If finding a particular solution is proving tricky, try adding extra room transitions in "actorset.txt" and extra pools in "actorpool.txt". Play around with the heap until you find what you want.<br/>
 
-This program is still in it's early stages and more changes and features are likely to come in the future. If you need help, message @GlitchesAndStuf on twitter or GlitchesAndStuff in the OoT/MM discord.
-
+This program is still in it's early stages and more changes and features are likely to come in the future. If you need help, message @GlitchesAndStuf on twitter or GlitchesAndStuff in the OoT/MM discord. If you have questions about using the program for OoT3D, message @gamestabled on twitter or gamestabled in the OoT3D discord.

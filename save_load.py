@@ -14,7 +14,7 @@ def get_actorset():
     if not os.path.exists('actorset.txt'):
         sys.exit("'actorset.txt' not found in directory!")
     f = open("actorset.txt", "r")
-    
+
     # Read each line and process into expected string format:
     p_lines = []
     comma_idx = []
@@ -23,7 +23,7 @@ def get_actorset():
         p_lines.append(line_info[0])
         comma_idx.append(line_info[1])
     f.close()
-    
+
     # Go through the text to find the last step needed
     last_step = None
     for this_line in p_lines:
@@ -37,13 +37,13 @@ def get_actorset():
                 if num > last_step:
                     last_step = num
     if last_step == None:
-        sys.exit("Missing step number in 'actorset.txt'")         
-         
+        sys.exit("Missing step number in 'actorset.txt'")
+
     # Now initialise our actorset list
     acs = []
     for i in range(last_step+1):
         acs.append([])
-    
+
     # Go through each line and add stuff to the actor set:
     this_step = None
     version = None
@@ -52,7 +52,7 @@ def get_actorset():
         this_line = p_lines[i]
         this_comma_idx = comma_idx[i]
         length = len(this_line)
-        
+
         # If the line is empty, ignore it
         if length != 0:
             # Check for key phrases "version" and "step"
@@ -63,10 +63,10 @@ def get_actorset():
                     this_step = int(this_line[4:])
             elif length > 4:
                 if str.lower(this_line[:4]) == "step":
-                    this_step = int(this_line[4:])            
+                    this_step = int(this_line[4:])
             if len(this_comma_idx) > 1:
                 sys.exit("More than one comma found in a line from 'actorset.txt'.")
-                
+
             # Or, check if it's a line with 1 comma and values either side
             elif len(this_comma_idx) == 1:
                 idx = this_comma_idx[0]
@@ -76,9 +76,9 @@ def get_actorset():
                     sys.exit("Actors in 'actorset.txt' listed before step number.")
                 else:
                     # Unpack values either side of comma
-                    actor_id = this_line[:idx] 
+                    actor_id = this_line[:idx]
                     despawn = this_line[idx + 1:]
-                    
+
                     # And append to our actor set
                     if np.size(acs[this_step]) == 0:
                         acs[this_step] = np.array([[int(actor_id,16),int(despawn)]])
@@ -94,7 +94,7 @@ def get_actorpool(acs):
     # Read from our actorpool file
     if not os.path.exists('actorpool.txt'):
         sys.exit("'actorpool.txt' not found in directory!")
-    
+
     # Open the text file and read all the lines.
     f = open("actorpool.txt", "r")
     # Read each line and process:
@@ -105,30 +105,30 @@ def get_actorpool(acs):
         p_lines.append(line_info[0])
         comma_idx.append(line_info[1])
     f.close()
-    
+
     # We also want to get some other data out of this file:
     actor1_id = EMPTY_ID
     actor2_id = EMPTY_ID
     actor1_step = EMPTY_ID
     actor2_step = EMPTY_ID
     offset = EMPTY_ID
-    
+
     # Get the actor number and the despawn timer.
     final_step = len(acs) - 1
     this_step = None
     actorpool = []
-        
+
     # Go through each line and add stuff to the actor set:
     for i in range(len(p_lines)):
         this_line = p_lines[i]
         this_comma_idx = comma_idx[i]
         length = len(this_line)
-        
+
         if length != 0:
-            # Check for various keywords                    
+            # Check for various keywords
             if length > 4:
                 if str.lower(this_line[:4]) == "step":
-                    this_step = int(this_line[4:]) 
+                    this_step = int(this_line[4:])
                     if this_step > final_step:
                         print(this_step,final_step)
                         sys.exit("Referenced step number in 'actorpool.txt' isn't established in 'actorset.txt'.")
@@ -145,10 +145,10 @@ def get_actorpool(acs):
                     actor1_step = int(this_line[11:])
                 elif str.lower(this_line[:11]) == "actor2_step":
                     actor2_step = int(this_line[11:])
-            
+
             # And check for actors to add to the pools:
             if len(this_comma_idx) > 2:
-                sys.exit("More than three arguments found in a line in 'actorpool.txt'.")                
+                sys.exit("More than three arguments found in a line in 'actorpool.txt'.")
             elif len(this_comma_idx) == 1 or len(this_comma_idx) == 2:
                 idx = this_comma_idx[0]
                 if idx == 0 or idx == len(this_line) - 1:
@@ -168,10 +168,10 @@ def get_actorpool(acs):
                             despawn1 = this_line[idx+1:idx1]
                             despawn2 = this_line[idx1+1:]
                             actorpool.append([this_step,int(actor_id,16),int(despawn1),int(despawn2)])
-        
+
     if len(actorpool) == 0:
         sys.exit("No actors have been given in 'actorpool.txt'.")
-        
+
     return actorpool, actor1_id, actor2_id, actor1_step, actor2_step, offset
 
 
@@ -182,8 +182,9 @@ def save_actorset(acs,version):
     dir_path = 'actorset_dump'
     if not os.path.exists(dir_path):
         os.makedirs(dir_path)
-    
+
     versions =[
+        "OoT3D_USA"   ,
         "OoT_NTSC_1.0",
         "OoT_NTSC_1.1",
         "OoT_NTSC_1.2",
@@ -202,35 +203,35 @@ def save_actorset(acs,version):
         "MM_PAL_1.1"  ,
         "MM_GC_J"     ,
         "MM_GC_U"     ,
-        "MM_GC_E"     
+        "MM_GC_E"
     ]
-   
+
     # Make folders if they don't exist
     for v in versions:
-        if not os.path.exists(dir_path + '\\' + v):
-            os.makedirs(dir_path + '\\' + v)
-    
+        if not os.path.exists(dir_path + '/' + v):
+            os.makedirs(dir_path + '/' + v)
+
     path = None
     # Make folders if they don't exist
     for v in versions:
-        if not os.path.exists(dir_path + '\\' + v):
-            os.makedirs(dir_path + '\\' + v)
-    
+        if not os.path.exists(dir_path + '/' + v):
+            os.makedirs(dir_path + '/' + v)
+
     # Get the version directory
     for v in versions:
         if str.lower(version) == str.lower(v):
-            path = dir_path + '\\' + v
+            path = dir_path + '/' + v
             break
-        
+
     # Invalid version?
-    if path == None:    
+    if path == None:
         sys.exit("No valid version has been given in 'actorset.txt'.")
-    
+
     # The number to give the file will be the number of files in the directory at the time.
     file_num = len(os.listdir(str(path)))
-    
+
     # Start writing the actor sets out
-    with open(path + "\\actorset"+str(file_num)+".txt", 'w+') as the_file:
+    with open(path + "/actorset"+str(file_num)+".txt", 'w+') as the_file:
         the_file.write("version:" + version+"\n\n")
         for i in range(len(acs)):
             the_file.write("Step "+str(i)+"\n")
