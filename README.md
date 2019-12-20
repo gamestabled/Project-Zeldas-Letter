@@ -344,6 +344,8 @@ STEP X
 .
 .
 ```
+The first option given for a deallocation step in the label definition is considered to be the default value, and it will be the value used when running the program with the "heap" option. When searching for a solution, for each usage of a label, the program will randomly select a deallocation step from the given options.
+
 
 ## Setting up Pools in "actorpool.txt"
 An actor pool is a pool of actors that can be randomly inserted at a paritcular step in a random order. By randomly inserting actors we can shuffle up the heap to hopefully achieve actor placements that line up and allow us to perform SRM. <br/>
