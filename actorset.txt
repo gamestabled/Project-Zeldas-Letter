@@ -1,8 +1,14 @@
 version=OoT3D_USA
 
+label:baby_dodongo,4,6 # Optional to kill baby dodongos
+label:hallway_keese,4,6 # Optional to kill these keese
+label:hallway_pot,4,6 # Optional to break these pots
+label:main_room_enemy_first,1,3 # Optional to kill these enemies
+label:main_room_wall_first,1,3 # Optional to break these walls
+
 # Start in the Main Room
 Step 0
-0x0018,9 # Probably the DC Boss Room load zone?
+0x0018,9 # Navi
 0x0023,8 # Load plane to Baby Dodongo Hallway
 0x0023,3 # Load plane to Bomb Bag Room (North)
 0x0023,3 # Load plane to Bomb Bag Room (South)
@@ -13,18 +19,18 @@ Step 0
 0x0125,3 # Grass
 0x0058,3
 0x0058,3
-0x0013,1 # Keese
-0x0013,1
-0x008a,1 # Beamos
-0x008a,1
-0x008a,1
+0x0013,main_room_enemy_first # Keese
+0x0013,main_room_enemy_first
+0x008a,main_room_enemy_first # Beamos
+0x008a,main_room_enemy_first
+0x008a,main_room_enemy_first
 0x0185,3
 0x0195,3
 0x004C,3
 0x004C,3
 0x004C,3
 0x004C,3
-0x0059,1 # Wall
+0x0059,main_room_wall_first # Wall
 0x0059,0 # Wall to Baby Dodongo Hallway
 0x011B,0 # Navi text
 0x000A,3 # Map chest
@@ -32,11 +38,11 @@ Step 0
 0x012A,3
 0x000A,3 # Deku Shield chest
 0x011B,0 # Navi text
-0x0059,1 # Wall
+0x0059,main_room_wall_first # Wall
 0x01B9,3
 0x012A,3
 0x003F,3
-0x0059,1 # Wall
+0x0059,main_room_wall_first # Wall
 0x0059,0 # Wall at entrance?
 
 # Kill Some Stuff?
@@ -51,25 +57,25 @@ Step 3
 0x002E,6
 0x002E,6
 0x002E,6
-0x0013,4 # Keese
-0x0013,4
-0x002F,4 # Baby Dodongos
-0x002F,4
-0x002F,4
-0x002F,4
-0x002F,4
-0x002F,4
+0x0013,hallway_keese # Keese
+0x0013,hallway_keese
+0x002F,baby_dodongo # Baby Dodongos
+0x002F,baby_dodongo
+0x002F,baby_dodongo
+0x002F,baby_dodongo
+0x002F,baby_dodongo
+0x002F,baby_dodongo
 0x0054,6
 0x0054,6
 0x0059,4 # Wall
 0x0095,6
 0x0111,6 # Pots
-0x0111,4
+0x0111,hallway_pot
 0x01C9,6
-0x0111,4 # Pots
-0x0111,4
-0x0111,4
-0x0111,4
+0x0111,hallway_pot # Pots
+0x0111,hallway_pot
+0x0111,hallway_pot
+0x0111,hallway_pot
 0x012A,6
 
 # Kill stuff

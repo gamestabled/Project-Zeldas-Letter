@@ -1,4 +1,4 @@
-actor1_id = 0x0111 # grass
+actor1_id = 0x0111 # pot
 actor2_id = 0x000A # chest
 actor1_step = 4 # Look for the pot in the heap after kills in Hallway
 actor2_step = 6 # Look for the chest in the heap when we enter Bomb Bag room

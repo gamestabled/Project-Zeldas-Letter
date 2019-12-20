@@ -33,7 +33,7 @@ def is_hex(s):
 
 def process_line(line):
     """
-    Takes an input string and removes non-alphanumeric characters other than "," "_" and "."
+    Takes an input string and removes non-alphanumeric characters other than "," "_" ":" and "."
     Also deals with comments (all characters after # are ignored)
 
     Outputs:
@@ -49,7 +49,7 @@ def process_line(line):
         elif line[i] == ',':
             out += line[i]
             comma_idx.append(i)
-        elif str.isalnum(line[i]) or line[i] == "_" or line[i] == ".":
+        elif str.isalnum(line[i]) or line[i] == "_" or line[i] == "." or line[i] == ":":
             out += line[i]
     return out, comma_idx
 

@@ -1,6 +1,7 @@
 import numpy as np
 import sys
 from random import seed
+from random import choice
 seed()
 
 import tools as t
@@ -228,7 +229,7 @@ def get_location(nodes,actor_id):
     idx = np.logical_and(nodes[:,1] == 2, nodes[:,3] == actor_id)
     return nodes[idx,0]
 
-def main(acs, show_heap = False, actor1_id = None, actor2_id = None, actor1_step = None, actor2_step = None):
+def main(acs, labels, show_heap = False, actor1_id = None, actor2_id = None, actor1_step = None, actor2_step = None):
     """
     Node should have: [
     0 Address, (if spot is unused/uninitialised, we use value 0)
@@ -248,6 +249,15 @@ def main(acs, show_heap = False, actor1_id = None, actor2_id = None, actor1_step
     for i in range(len(acs)):
         # If it's not empty, allocate it
         if np.size(acs[i]) != 0:
+            need_to_convert = False
+            # Fill in labels with default values
+            for idx in range(len(acs[i])):
+                if acs[i][idx][1] in labels:
+                    need_to_convert = True
+                    acs[i][idx][1] = int(labels[acs[i][idx][1]][0])
+            # If necessary, convert back to ints
+            if need_to_convert:
+                acs[i] = [[int(numeric_string[0]),int(numeric_string[1])] for numeric_string in acs[i]]
             nodes = allocate_set(nodes,acs[i])
 
         # Now perform a deallocate step:
@@ -276,7 +286,7 @@ def add_from_pool(this_acs,actor_id,timer):
         this_acs = np.append(this_acs, np.array([[actor_id,timer]]),axis=0)
     return this_acs
 
-def solution_finder(acset):
+def solution_finder(acset, labels):
     # This is for modifying all the data randomly until we get a result that we want.
     acpool, actor1_id, actor2_id, actor1_step, actor2_step, offset = io.get_actorpool(acset)
     num_sets = len(acset)
@@ -322,9 +332,18 @@ def solution_finder(acset):
                 # if the set is still empty, replace it with an empty list []
                 if np.size(acs[i]) == 0:
                     acs[i] = []
+            # Randomly fill in labels
+            need_to_convert = False
+            for idx in range(len(acs[i])):
+                if acs[i][idx][1] in labels:
+                    need_to_convert = True
+                    acs[i][idx][1] = int(choice(labels[acs[i][idx][1]]))
+            if need_to_convert:
+                acs[i] = [[int(numeric_string[0]),int(numeric_string[1])] for numeric_string in acs[i]]
+
 
         # Run the main simulation and get the positions of the deisred actors:
-        actor1_pos, actor2_pos = main(acs,False,actor1_id, actor2_id,actor1_step, actor2_step)
+        actor1_pos, actor2_pos = main(acs,labels,False,actor1_id, actor2_id,actor1_step, actor2_step)
 
         # Find if any of the sets of found actors are the desired offset away:
         POS1, POS2 = np.meshgrid(actor1_pos,actor2_pos)
@@ -401,20 +420,20 @@ while not to_exit:
         to_exit = True
         exit()
     elif search_mode == str.lower("heap"):
-        acs, version = io.get_actorset()
+        acs, labels, version = io.get_actorset()
         lookup_path, node_size, bugs_id, bf_id, use_overlays, start_address = version_setter(version)
         if lookup_path == None:
             print("Invalid version in actorpool.txt")
         else:
             lookup = np.loadtxt(lookup_path, dtype='<U16', delimiter = ',',skiprows=1)
             lookup = np.vectorize(lambda x: int(x,16))(lookup)
-            main(acs,True)
+            main(acs,labels,True)
     else:
-        acs, version = io.get_actorset()
+        acs, labels, version = io.get_actorset()
         lookup_path, node_size, bugs_id, bf_id, use_overlays, start_address = version_setter(version)
         if lookup_path == None:
             print("Invalid version in actorpool.txt")
         else:
             lookup = np.loadtxt(lookup_path, dtype='<U16', delimiter = ',',skiprows=1)
             lookup = np.vectorize(lambda x: int(x,16))(lookup)
-        solution_finder(acs)
+        solution_finder(acs, labels)

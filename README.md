@@ -326,6 +326,25 @@ The bombs and the majority of the initial room actors now have a deallocation st
 
 If you look carefully, you may notice that Step 1 wasn't actually neccessary, we could've given the navi text for the door a deallocation step of 0 and the heap would've ended up exactly the same. But it's up to you however you want to lay out your steps, and there are often multiple ways of achieving the same thing - some are more readable than others.
 
+## Labels in "actorset.txt"
+An optional feature in actorset.txt is the creation of labels. The format of a label is
+```
+label:LABEL_NAME,LIST_OF_STEPS
+```
+A label can be used to designate multiple options for the deallocation step of an actor. For example, let's say there is a Keese, which can be optionally killed at Step 4, but will otherwise be unloaded at Step 6. You might choose to create a label as follows:
+```
+label:keese,4,6
+```
+Then, when that Keese is allocated, you would use
+```
+STEP X
+.
+.
+0x0013,keese # 0x0013 is the actor ID of Keese
+.
+.
+```
+
 ## Setting up Pools in "actorpool.txt"
 An actor pool is a pool of actors that can be randomly inserted at a paritcular step in a random order. By randomly inserting actors we can shuffle up the heap to hopefully achieve actor placements that line up and allow us to perform SRM. <br/>
 
@@ -481,4 +500,4 @@ These are indeed in the same place, which means that boomeranging the second hea
 
 If finding a particular solution is proving tricky, try adding extra room transitions in "actorset.txt" and extra pools in "actorpool.txt". Play around with the heap until you find what you want.<br/>
 
-This program is still in it's early stages and more changes and features are likely to come in the future. If you need help, message @GlitchesAndStuf on twitter or GlitchesAndStuff in the OoT/MM discord. If you have questions about using the program for OoT3D, message @gamestabled on twitter or gamestabled in the OoT3D discord.
+This program is still in it's early stages and more changes and features are likely to come in the future. If you need help, message @GlitchesAndStuf on twitter or GlitchesAndStuff in the OoT/MM discord. If you have questions about using labels or using the program for OoT3D, message @gamestabled on twitter or gamestabled in the OoT3D discord.

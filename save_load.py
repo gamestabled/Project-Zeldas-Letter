@@ -44,6 +44,9 @@ def get_actorset():
     for i in range(last_step+1):
         acs.append([])
 
+    # Now initialize our label dictionary
+    labels = {}
+
     # Go through each line and add stuff to the actor set:
     this_step = None
     version = None
@@ -55,17 +58,30 @@ def get_actorset():
 
         # If the line is empty, ignore it
         if length != 0:
-            # Check for key phrases "version" and "step"
-            if length > 7:
-                if str.lower(this_line[:7]) == "version":
-                    version = this_line[7:]
-                elif str.lower(this_line[:4]) == "step":
-                    this_step = int(this_line[4:])
-            elif length > 4:
-                if str.lower(this_line[:4]) == "step":
-                    this_step = int(this_line[4:])
-            if len(this_comma_idx) > 1:
-                sys.exit("More than one comma found in a line from 'actorset.txt'.")
+            # Check for key phrases "version", "step", and "label"
+            if length > 4 and str.lower(this_line[:4]) == "step":
+                this_step = int(this_line[4:])
+            if length > 6 and str.lower(this_line[:6]) == "label:":
+                if len(this_comma_idx) == 0:
+                    sys.exit("Failed to interpret label error: No comma.")
+                idx_first_comma = this_comma_idx[0]
+                label_name = this_line[6:idx_first_comma]
+                options = []
+                idx_start = idx_first_comma
+                for i in range(1,len(this_comma_idx)):
+                    idx_end = this_comma_idx[i]
+                    options.append(this_line[idx_start + 1:idx_end])
+                    idx_start = idx_end
+                if idx_start == len(this_line) - 1:
+                    sys.exit("Found comma at end of line in 'actorset.txt'.")
+                options.append(this_line[idx_start + 1:])
+                if len(options) == 0:
+                    sys.exit("Failed to interpret label error: No values given.")
+                labels[label_name] = options
+            elif len(this_comma_idx) > 1:
+                sys.exit("More than one comma found outside a label definition in a line from 'actorset.txt'.")
+            if length > 7 and str.lower(this_line[:7]) == "version":
+                version = this_line[7:]
 
             # Or, check if it's a line with 1 comma and values either side
             elif len(this_comma_idx) == 1:
@@ -73,18 +89,26 @@ def get_actorset():
                 if idx == 0 or idx == len(this_line) - 1:
                     sys.exit("Found comma at start or end of line in 'actorset.txt'.")
                 elif this_step == None:
-                    sys.exit("Actors in 'actorset.txt' listed before step number.")
+                    if not (length > 6 and str.lower(this_line[:6]) == "label:"):
+                        sys.exit("Actors in 'actorset.txt' listed before step number.")
                 else:
                     # Unpack values either side of comma
                     actor_id = this_line[:idx]
                     despawn = this_line[idx + 1:]
 
                     # And append to our actor set
-                    if np.size(acs[this_step]) == 0:
-                        acs[this_step] = np.array([[int(actor_id,16),int(despawn)]])
+                    if despawn in labels:
+                        if np.size(acs[this_step]) == 0:
+                            acs[this_step] = np.array([[int(actor_id,16),despawn]])
+                        else:
+                            acs[this_step] = np.append(acs[this_step], np.array([[int(actor_id,16),despawn]]),axis=0)
                     else:
-                        acs[this_step] = np.append(acs[this_step], np.array([[int(actor_id,16),int(despawn)]]),axis=0)
-    return acs, version
+                        if np.size(acs[this_step]) == 0:
+                            acs[this_step] = np.array([[int(actor_id,16),int(despawn)]])
+                        else:
+                            acs[this_step] = np.append(acs[this_step], np.array([[int(actor_id,16),int(despawn)]]),axis=0)
+
+    return acs, labels, version
 
 def get_actorpool(acs):
     """
