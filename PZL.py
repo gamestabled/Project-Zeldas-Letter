@@ -16,6 +16,8 @@ start_address = None
 node_size = None
 bugs_id = None
 bf_id = None
+bombs_id = None
+bombchus_id = None
 lookup = None
 use_overlays = True
 
@@ -307,11 +309,17 @@ def solution_finder(acset, labels):
                 # Pick a random actors
                 idx = t.pick_random(num_actors)
                 actors = this_acp[idx]
+                # Cap at three explosives
+                explosive_counter = 0
                 # Add each one to the actorset according to their rules.
                 for j in range(len(actors)):
                     actor_id = actors[j,1]
                     timer1 = actors[j,2]
                     timer2 = actors[j,3]
+                    if actor_id == bombs_id or actor_id == bombchus_id:
+                        explosive_counter = explosive_counter + 1
+                        if explosive_counter > 3:
+                            continue
                     if actor_id == bugs_id:
                         # Spawn 3 bugs:
                         for k in range(3):
@@ -352,7 +360,9 @@ def solution_finder(acset, labels):
         print()
         if np.any(POS2 - POS1 == offset):
             print("SOLUTION FOUND")
+            print(acs)
             io.save_actorset(acs,version)
+            sys.exit("quitting after saving solution")
 
 def version_setter(version):
     versions = [
@@ -388,27 +398,37 @@ def version_setter(version):
             if str.lower(version)[:3] == "oot":
                 bugs_id = 0x20
                 bf_id = 0xF0
+                bombs_id = 0x10
+                bombchus_id = 0xDA
                 use_overlays = True
                 lookup_path = "oot_actors.pzl"
             if str.lower(version)[:5] == "oot3d":
                 bugs_id = 0x20
                 bf_id = 0xF0
+                bombs_id = 0x10
+                bombchus_id = 0xDA
                 use_overlays = False
                 lookup_path = "oot3d_actors.pzl"
             elif str.lower(version[:4]) == "mm_j":
                 bugs_id = 0x16
                 bf_id = -1
+                #TODO
+                #bombs_id
+                #bombchus_id
                 use_overlays = True
                 lookup_path = "mmj_actors.pzl"
             else:
                 bugs_id = 0x16
                 bf_id = -1
+                #TODO
+                #bombs_id
+                #bombchus_id
                 use_overlays = True
                 lookup_path = "mm_actors.pzl"
     if not found_version:
         sys.exit("No valid version has been given in 'actorset.txt'.")
 
-    return lookup_path, node_size, bugs_id, bf_id, use_overlays, start_address
+    return lookup_path, node_size, bugs_id, bf_id, bombs_id, bombchus_id, use_overlays, start_address
 
 to_exit = False
 while not to_exit:
@@ -421,7 +441,7 @@ while not to_exit:
         exit()
     elif search_mode == str.lower("heap"):
         acs, labels, version = io.get_actorset()
-        lookup_path, node_size, bugs_id, bf_id, use_overlays, start_address = version_setter(version)
+        lookup_path, node_size, bugs_id, bf_id, bombs_id, bombchus_id, use_overlays, start_address = version_setter(version)
         if lookup_path == None:
             print("Invalid version in actorpool.txt")
         else:
@@ -430,7 +450,7 @@ while not to_exit:
             main(acs,labels,True)
     else:
         acs, labels, version = io.get_actorset()
-        lookup_path, node_size, bugs_id, bf_id, use_overlays, start_address = version_setter(version)
+        lookup_path, node_size, bugs_id, bf_id, bombs_id, bombchus_id, use_overlays, start_address = version_setter(version)
         if lookup_path == None:
             print("Invalid version in actorpool.txt")
         else:
