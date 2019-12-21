@@ -413,16 +413,16 @@ def version_setter(version):
                 bugs_id = 0x16
                 bf_id = -1
                 #TODO
-                #bombs_id
-                #bombchus_id
+                bombs_id = None
+                bombchus_id = None
                 use_overlays = True
                 lookup_path = "mmj_actors.pzl"
             else:
                 bugs_id = 0x16
                 bf_id = -1
                 #TODO
-                #bombs_id
-                #bombchus_id
+                bombs_id = None
+                bombchus_id = None
                 use_overlays = True
                 lookup_path = "mm_actors.pzl"
     if not found_version:
