@@ -1,5 +1,6 @@
 import numpy as np
 import sys
+import copy
 from random import seed
 from random import choice
 seed()
@@ -11,6 +12,7 @@ EMPTY_ID = -1
 FILLER_ID = 10001
 UNLIMITED = 0xFFFFF
 ARR_SIZE = 400
+EXPLOSIVE_LIMIT = 3
 
 start_address = None
 node_size = None
@@ -231,7 +233,7 @@ def get_location(nodes,actor_id):
     idx = np.logical_and(nodes[:,1] == 2, nodes[:,3] == actor_id)
     return nodes[idx,0]
 
-def main(acs, labels, show_heap = False, actor1_id = None, actor2_id = None, actor1_step = None, actor2_step = None):
+def main(acs, labels, show_heap = False, default_labels = False, actor1_id = None, actor2_id = None, actor1_step = None, actor2_step = None):
     """
     Node should have: [
     0 Address, (if spot is unused/uninitialised, we use value 0)
@@ -256,7 +258,12 @@ def main(acs, labels, show_heap = False, actor1_id = None, actor2_id = None, act
             for idx in range(len(acs[i])):
                 if acs[i][idx][1] in labels:
                     need_to_convert = True
-                    acs[i][idx][1] = int(labels[acs[i][idx][1]][0])
+                    if default_labels:
+                        # print("using a default label")
+                        acs[i][idx][1] = int(labels[acs[i][idx][1]][0])
+                    else:
+                        # print("filling in a label")
+                        acs[i][idx][1] = int(choice(labels[acs[i][idx][1]]))
             # If necessary, convert back to ints
             if need_to_convert:
                 acs[i] = [[int(numeric_string[0]),int(numeric_string[1])] for numeric_string in acs[i]]
@@ -318,7 +325,7 @@ def solution_finder(acset, labels):
                     timer2 = actors[j,3]
                     if actor_id == bombs_id or actor_id == bombchus_id:
                         explosive_counter = explosive_counter + 1
-                        if explosive_counter > 3:
+                        if explosive_counter > EXPLOSIVE_LIMIT:
                             continue
                     if actor_id == bugs_id:
                         # Spawn 3 bugs:
@@ -341,17 +348,18 @@ def solution_finder(acset, labels):
                 if np.size(acs[i]) == 0:
                     acs[i] = []
             # Randomly fill in labels
-            need_to_convert = False
-            for idx in range(len(acs[i])):
-                if acs[i][idx][1] in labels:
-                    need_to_convert = True
-                    acs[i][idx][1] = int(choice(labels[acs[i][idx][1]]))
-            if need_to_convert:
-                acs[i] = [[int(numeric_string[0]),int(numeric_string[1])] for numeric_string in acs[i]]
+            # need_to_convert = False
+            # for idx in range(len(acs[i])):
+            #    if acs[i][idx][1] in labels:
+            #        need_to_convert = True
+            #        acs[i][idx][1] = int(choice(labels[acs[i][idx][1]]))
+            # if need_to_convert:
+            #    acs[i] = [[int(numeric_string[0]),int(numeric_string[1])] for numeric_string in acs[i]]
 
 
         # Run the main simulation and get the positions of the deisred actors:
-        actor1_pos, actor2_pos = main(acs,labels,False,actor1_id, actor2_id,actor1_step, actor2_step)
+        # print(acs)
+        actor1_pos, actor2_pos = main(copy.deepcopy(acs),labels,False,False,actor1_id, actor2_id,actor1_step, actor2_step)
 
         # Find if any of the sets of found actors are the desired offset away:
         POS1, POS2 = np.meshgrid(actor1_pos,actor2_pos)
@@ -360,9 +368,16 @@ def solution_finder(acset, labels):
         print()
         if np.any(POS2 - POS1 == offset):
             print("SOLUTION FOUND")
+            print("actor1_id: ", actor1_id)
+            print("actor2_id: ", actor2_id)
+            print("actor1_pos: ", actor1_pos)
+            print("actor2_pos: ", actor2_pos)
+            print("offset: ", offset)
+            print("POS1: ", POS1)
+            print("POS2: ", POS2)
             print(acs)
             io.save_actorset(acs,version)
-            sys.exit("quitting after saving solution")
+            sys.exit("Found a solution, guess I'll die")
 
 def version_setter(version):
     versions = [
@@ -447,7 +462,7 @@ while not to_exit:
         else:
             lookup = np.loadtxt(lookup_path, dtype='<U16', delimiter = ',',skiprows=1)
             lookup = np.vectorize(lambda x: int(x,16))(lookup)
-            main(acs,labels,True)
+            main(acs,labels,True,True)
     else:
         acs, labels, version = io.get_actorset()
         lookup_path, node_size, bugs_id, bf_id, bombs_id, bombchus_id, use_overlays, start_address = version_setter(version)

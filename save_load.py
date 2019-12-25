@@ -256,7 +256,7 @@ def save_actorset(acs,version):
 
     # Start writing the actor sets out
     with open(path + "/actorset"+str(file_num)+".txt", 'w+') as the_file:
-        the_file.write("version:" + version+"\n\n")
+        the_file.write("version=" + version+"\n\n")
         for i in range(len(acs)):
             the_file.write("Step "+str(i)+"\n")
             for j in range(len(acs[i])):
